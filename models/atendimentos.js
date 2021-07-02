@@ -69,6 +69,11 @@ class Atendimento  {
             }
         })
     }
+    /*
+     * @param {int id} - id do atendimento
+     * @param {String} - id do atendimento e campos a alterar
+     * @return {array} - Status-code (400 ou 200) e informações do atendimento alterado
+    */
     patch(req, campos, res) {
         if(campos.data){
             campos.data = moment(campos.data, 'DD/MM/YYYY').format('YYYY-MM-DD HH:MM:SS')
