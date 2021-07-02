@@ -2,6 +2,10 @@ const moment = require('moment')
 const conexao = require('../infraestrutura/conexao')
 
 class Atendimento  {
+    /*
+     * @param {String} - cliente, pet, servico, status, observacoes, data agendamento
+     * @return {String} - Status-code (400 ou 200) e informações do cadastro na base de dados
+    */
     adiciona(atendimento, res) {
         const dataCriacao = moment().format('YYYY-MM-DD HH:MM:SS')
         const data = moment(atendimento.data, 'DD/MM/YYYY').format('YYYY-MM-DD HH:MM:SS')
@@ -36,6 +40,34 @@ class Atendimento  {
         }
 
 
+    }
+    /*
+     * @return {Object} - Retorna todos atendimentos cadastrados
+    */
+    lista(res) {
+        const sql = 'SELECT * FROM Atendimentos'
+        conexao.query(sql, (erro, resultado) =>  {
+            if(erro){
+                res.status(400).json(erro)
+            }else{
+                res.status(200).json(resultado)
+            }
+        })
+    }
+    /*
+     * @param {int id} - id do atendimento
+     * @return {array} - Status-code (400 ou 200) e informações do atendimento
+    */
+    getId(req, res){
+        const sql = `SELECT * FROM Atendimentos WHERE id=${req}`
+
+        conexao.query(sql, (erro, resultado) => {
+            if(erro){
+                res.status(400).json(erro)
+            }else{
+                res.status(200).json(resultado[0])
+            }
+        })
     }
 }
 
