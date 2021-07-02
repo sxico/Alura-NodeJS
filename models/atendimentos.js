@@ -34,7 +34,7 @@ class Atendimento  {
                 if(erro) {
                     res.status(400).json(erro)
                 } else {
-                    res.status(201).json(resultados)
+                    res.status(201).json({atendimento})
                 }
             })        
         }
@@ -74,7 +74,7 @@ class Atendimento  {
      * @param {String} - id do atendimento e campos a alterar
      * @return {array} - Status-code (400 ou 200) e informações do atendimento alterado
     */
-    patch(req, campos, res) {
+    patch(id, campos, res) {
         if(campos.data){
             campos.data = moment(campos.data, 'DD/MM/YYYY').format('YYYY-MM-DD HH:MM:SS')
         }
@@ -83,14 +83,29 @@ class Atendimento  {
         }else{
             const sql = `UPDATE Atendimentos SET ? WHERE id=?`
 
-            conexao.query(sql, [campos, req], (erro, resultado) => {
+            conexao.query(sql, [campos, id], (erro, resultado) => {
                 if(erro){
                     res.status(400).json(erro)
                 }else{
-                    res.status(200).json(resultado)
+                    res.status(200).json({...campos, id})
                 }
             })
         }
+    }
+    /*
+     * @param {int id} - id do atendimento
+     * @return {array} - Status-code (400 ou 200) e informações do atendimento deletado
+    */
+    delete(id, res) {
+        const sql = `DELETE FROM Atendimentos WHERE id=${id}`
+
+        conexao.query(sql, (erro, resultado) => {
+            if(erro){
+                res.status(400).json(erro)
+            }else{
+                res.status(200).json({id})
+            }
+        })
     }
 }
 
