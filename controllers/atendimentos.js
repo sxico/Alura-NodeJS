@@ -12,5 +12,7 @@ module.exports = app => {
         const atendimento = req.body
         Atendimento.adiciona(atendimento, res)
     })
-    
+    app.patch('/atendimentos/:id', (req,res) => {
+        Atendimento.patch(parseInt(req.params.id), req.body, res)
+    } )
 }

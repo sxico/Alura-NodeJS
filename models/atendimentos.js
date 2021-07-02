@@ -58,7 +58,7 @@ class Atendimento  {
      * @param {int id} - id do atendimento
      * @return {array} - Status-code (400 ou 200) e informações do atendimento
     */
-    getId(req, res){
+    getId(req,res){
         const sql = `SELECT * FROM Atendimentos WHERE id=${req}`
 
         conexao.query(sql, (erro, resultado) => {
@@ -68,6 +68,24 @@ class Atendimento  {
                 res.status(200).json(resultado[0])
             }
         })
+    }
+    patch(req, campos, res) {
+        if(campos.data){
+            campos.data = moment(campos.data, 'DD/MM/YYYY').format('YYYY-MM-DD HH:MM:SS')
+        }
+        if(campos.dataCriacao){
+            res.status(400).json("Campo dataCriacao não pode ser alterado!") 
+        }else{
+            const sql = `UPDATE Atendimentos SET ? WHERE id=?`
+
+            conexao.query(sql, [campos, req], (erro, resultado) => {
+                if(erro){
+                    res.status(400).json(erro)
+                }else{
+                    res.status(200).json(resultado)
+                }
+            })
+        }
     }
 }
 
